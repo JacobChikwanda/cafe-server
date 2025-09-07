@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider  = "prisma-client-py"
+  recursive_type_depth = 5
+}
+
+model Customer {
+  id              Int     @id @default(autoincrement())
+  name            String
+  email           String
+  phoneNumber     String
+  newsletterSignup Boolean @default(false)
+
+  reservations    Reservation[]
+}
+
+model Reservation {
+  id           Int       @id @default(autoincrement())
+  customerId   Int
+  timeSlot     DateTime
+  tableNumber  Int
+
+  customer     Customer  @relation(fields: [customerId], references: [id])
+}
